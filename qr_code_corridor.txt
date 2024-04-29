@@ -1,0 +1,517 @@
+Spesifikasi :
+Database : qr_code corridor
+Table : 
+1. admin : : 
+TABLE admin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+2. videos : 
+TABLE videos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    file_path VARCHAR(255) NOT NULL,
+    thumbnail_path VARCHAR(255),
+    uploaded_by VARCHAR(50),
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+fitur user : 
+- guest = 
+1. Hanya melihat landing page (View)
+
+- admin  = 
+2. Bisa melakukan CRUD di video yang tersedia di Landing Page.
+3. bisa log in dan log out 
+
+Cara bikin system 1 video dokumentasi di dalam landing page 2 user guest & admin sebagai user level tertinggi, berarti untuk fitur login 1 saja di khususkan untuk admin.
+
+jadi bila sebagai admin nanti video yang ada di landing page bisa di operasikan dengan metode CRUD (Create, Read, Update, Delete) yang sebelumnya sudah di store di sebuah table yang bernama videos di dalam database qr_code_corridor.
+
+jadi ada file native saya yang berisi html, css, js yang nantinya di integrasikan sama node, express js untuk pembuatan database dan table dan store video yang ada di landing page.
+
+index.html : 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Strict Test</title>
+    <link rel="stylesheet" href="/backend/backendd/public/stylesheets/style.css">
+    <link rel="stylesheet" href="/backend/backendd/public/stylesheets/style-mobile.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <div class="logo-container">
+                <img src="/backend/backendd/src/assets/img/(NEW)_LOGO_AIO-01.png" alt="Otsuka Logo" class="logo">
+            </div>
+            <li><a href="#"><b><h2 class="back">Login</h2></b></a></li>
+            <li><a href="#"><b></b></a></li>
+        </ul>
+    </nav>
+<!-- Your HTML code -->
+<div class="container">
+    <div class="wrapper">
+        <br> <br> <br> <p class="h11 text-center"><b>PROSES PEMBUATAN POCARI SWEAT</b></p>  <br>
+    <p class="pp text-center">GO SWEAT GO ION</p> <br> <br>
+    <video controls id="videoPlayer" controlsList="nodownload" disablePictureInPicture playsinline>
+        <source src="" type="video/mp4" id="videoSource"> <!-- Empty src attribute to be filled by JavaScript -->
+        <!-- English subtitle track -->
+        <track kind="subtitles" src="/backend/backendd/src/assets/video/subtitles_ENG.vtt" srclang="en" label="English">
+    </video>    
+    <!-- <div class="watermark">PT Amerta Indah Otsuka Property</div> <br> -->
+    </div> 
+</div>
+
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1 class="alert-text">Dilarang mengambil screenshot di halaman ini!!</h1>
+        </div>
+    </div>
+
+    <div class="half-background"></div>
+    <div class="content">
+        <footer>
+            <div class="left-section">
+                <span>&copy; 2024 PT Amerta Indah Otsuka</span>
+            </div>
+            <div class="right-section">
+                <a href="https://twitter.com/otsuka_id"><img width="20" height="20" src="https://img.icons8.com/ios-glyphs/30/twitter--v1.png" alt="twitter--v1"/></a>
+                <a href="https://www.instagram.com/otsuka.id/"><img width="20" height="20" src="https://img.icons8.com/ios-glyphs/30/instagram-new.png" alt="instagram-new"/></a>
+                <a href="https://www.linkedin.com/company/pt-amerta-indah-otsuka"><img width="20" height="20" src="https://img.icons8.com/ios-glyphs/30/linkedin.png" alt="linkedin"/></a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/backend/backendd/public/javascripts/function.js"></script>
+</body>
+</html>
+
+style.css : 
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+*,
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    background: linear-gradient(rgba(54,85,155, 0.0), rgba(55,124,203, 0.1)); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-bottom-left-radius: 10px; 
+    border-bottom-right-radius: 10px; 
+}
+
+
+nav ul {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+nav li {
+    height: 100px;
+}
+
+nav a {
+    height: 100%;
+    padding: 0 30px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: #18a0d6;
+    font-family: 'Roboto', sans-serif; 
+}
+
+nav a:hover {
+    background-color: rgba(24, 160, 214, 0.3);
+}
+
+nav li:first-child {
+    margin-right: auto;
+}
+
+.back {
+    padding-top: 20px;
+}
+
+.container {
+    position: relative;
+}
+
+.wrapper {
+    position:relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+    /* height: 500px;  */
+    display: flex;
+}
+
+.logo-container {
+    margin-right: auto;
+}
+
+.logo {
+    width: auto;
+    height: auto;
+    max-width: 75px;
+    max-height: 150px;
+    transform: scale(2.5); 
+    margin-left: 80%;
+}
+
+/* body, html {
+    height: 100%;
+} */
+
+.half-background {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 45%; 
+    background-image: url('/backend/backendd/src/assets/img/pocari_seger.jpg'); 
+    background-size: cover;
+    z-index: -1; 
+}
+
+.content {
+    position: fixed;
+    z-index: 1; 
+    width: 100%; 
+    height: 45%; 
+    background-color: #C1EAFE; 
+    opacity: 0.7;
+    bottom: 0;
+}
+
+h2 {
+    border-radius: 5px;
+    display: inline-block;
+    padding: 10px;
+    margin-bottom: 20px;
+    color: #18a0d6; 
+    font-style:normal;
+    font-size: 30 px;
+    font-weight: bold; 
+    text-align: center; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+}
+
+.note {
+    color: red;
+    background-color: white; 
+    padding: 10px; 
+    display: inline-block; 
+    border-radius: 5px; 
+    right: 25px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.h11 {
+    font-family: 'montserrat', sans-serif;
+    font-size: 30px;
+    text-shadow: 4px 4px 4px rgba(193, 234, 254,.25);
+    text-align: center;
+    color: #000000;
+    padding: 5px 5px; 
+    border-radius: 50px;
+    z-index: 999;
+}
+
+.pp {
+    font-family: 'Poppins', sans-serif;
+    font-size: large;
+    text-shadow: 4px 4px 4px rgba(0,0,255,.25);
+    color: #000000;
+    background-color: rgb(193, 234, 254); 
+    padding: 10px 10px;
+    padding-left: 20px;
+    padding-right: 20px; 
+    border-radius: 50px;
+    z-index: 999; 
+}
+
+video {
+    width: 45%; /* Set initial width to 80% */
+    /* max-width: 650px; Set maximum width */
+    height: auto; /* Automatically adjust height to maintain aspect ratio */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3); /* Add box shadow */
+    border: 10px solid #ececec; /* Add border */
+    border-radius: 50px; /* Add border radius */
+    z-index: 2; /* Ensure proper stacking order */
+}
+
+.watermark {
+    font-size: 10px;
+    color: #4c4c4c;
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2px;
+    background-color: rgba(173, 216, 230, 0.5); 
+    border-radius: 5px;
+    z-index: 3;
+}
+
+/* CSS for Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    top: 100px;
+    bottom: 100px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 0, 0);
+}
+
+.modal-content {
+    background-color: #ef8686;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 50px;
+    width: 50%;
+    text-align: center;
+}
+
+.alert-text {
+    font-family: 'Roboto', sans-serif;
+}
+
+.close {
+    color: #000000;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(54, 85, 155, 0.2); 
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    border-top-left-radius: 10px; 
+    border-top-right-radius: 10px;
+}
+
+.left-section {
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; 
+    position: absolute; 
+    top: 20px; 
+    left: 50px;
+}
+
+.right-section {
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; 
+    position: absolute; 
+    top: 20px; 
+    right: 100px; 
+}
+
+.logos {
+    width: 20px;
+    height: auto;
+    margin-right: 3px;
+}
+
+span {
+    font-family: 'Poppins', sans-serif;
+    font-size: 70%
+}
+
+function.js : 
+window.addEventListener('resize', function() {
+    // Check viewport dimensions and apply styles dynamically
+});
+
+// Get the video player element
+var videoPlayer = document.getElementById('videoPlayer');
+let isFullScreen = false;
+
+// Set video source dynamically
+document.getElementById('videoSource').src = "backend/backendd/src/assets/video/Proses Produksi Pocari Sweat.mp4";
+
+// Load the new video source
+document.getElementById('videoPlayer').load();
+
+// window.onload = function() {
+//     var video = document.getElementById("videoPlayer");
+//     video.play();
+// };
+    
+// Function to open the modal
+function openModal() {
+    var modal = document.getElementById("myModal");
+    modal.style.display = "block";
+}
+
+// Function to close the modal and play the video again
+function closeModal() {
+    var modal = document.getElementById("myModal");
+    modal.style.display = "none";
+    videoPlayer.play(); // Play the video when modal is closed
+}
+
+// Event listener for the close button inside the modal
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+    closeModal(); // Close modal and play video
+}
+
+document.addEventListener('keydown', function(event) {
+    // Prevent the default action of the keydown event
+    event.preventDefault();
+
+    // Show alert
+    //alert('Dilarang mengambil screenshot dari halaman ini!!');
+
+    // Open the modal
+    openModal();
+});
+
+
+// Event listener for keydown event
+document.addEventListener('keydown', function (event) {
+    if(isFullScreen){
+        if (event.ctrlKey && (event.key === 'c' || event.key === 'u' || event.key === 'i' || event.key === 'j' || event.key === 'k' || event.key === 's' || event.key === 'x' || event.key === 'q')) {
+            document.exitFullscreen();
+            event.preventDefault();
+            openModal();
+            isFullScreen = false; 
+        }
+        
+    }else{
+        if (event.ctrlKey && (event.key === 'c' || event.key === 'u' || event.key === 'i' || event.key === 'j' || event.key === 'k' || event.key === 's' || event.key === 'x' || event.key === 'q')) {
+            event.preventDefault();
+            openModal();
+        }
+    }
+});
+
+document.addEventListener('fullscreenchange', function(event) {
+    if (document.fullscreenElement) {
+        // Fullscreen mode entered
+        isFullScreen = true;
+    } else {
+        // Fullscreen mode exited
+        isFullScreen = false;
+    }
+});
+
+// Event listener for keyup event
+document.addEventListener('keyup', function (event) {
+    openModal();
+    videoPlayer.pause();
+    navigator.clipboard.writeText('');
+});
+
+// // Event listener for resizing the window
+// window.addEventListener('resize', function() {
+//     openModal(); // Open modal when resizing window
+//     alert('Dilarang mengambil screenshot dari halaman ini!!');
+// });
+
+function gotoVideo() {
+    //Redirect to the video page
+    window.location.href = "/video/Proses Produksi Pocari Sweat.mp4";
+}
+
+// Prevent right-click
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+});
+
+// Set the modal appearance speed
+var modalAppearSpeed = 100; // milliseconds
+document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && (event.key === 'c' || event.key === 'u' || event.key === 'i' || event.key === 'j' || event.key === 'k' || event.key === 's' || event.key === 'x' || event.key === 'q')) {
+        setTimeout(openModal, modalAppearSpeed);
+    }
+});
+
+window.addEventListener('beforeunload', function(event) {
+    // Open the modal before leaving the page
+    openModal();
+});
+
+window.addEventListener('blur', function(event) {
+    // Open the modal when the window loses focus (user switches tabs)
+    openModal();
+});
+
+
+
+// function goToVideo() {
+//     // Redirect to the video page
+//     window.location.href = "/video/Proses Produksi Pocari Sweat.mp4";
+// }
+
+
+// document.addEventListener('contextmenu', function (event) {
+//     event.preventDefault();
+//     redirectToBlackPage();
+// });
+
+// document.addEventListener('keydown', function (event) {
+//     if (event.ctrlKey && (event.key === 'c' || event.key === 'u' || event.key === 'i' || event.key === 'j' || event.key === 'k' || event.key === 's' || event.key === 'x' || event.key === 'q')) {
+//         event.preventDefault();
+//         redirectToBlackPage();
+//     }
+// });
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     const videoPlayer = document.getElementById('videoPlayer');
+//     videoPlayer.addEventListener('play', function () {
+//         this.controls = true;
+//     });
+// });
+
+// document.addEventListener('keyup',(e) => {
+//     navigator.clipboard.writeText('');
+//     alert('Screenshots disabled');
+// });
+
+// window.addEventListener('contextmenu', function (e) {
+//     e.preventDefault();
+//     redirectToBlackPage();
+// }, false);
+
+// function redirectToBlackPage() {
+//     window.location.href = 'black.html'; // Ganti 'black.html' dengan URL halaman baru yang hitam
+// }

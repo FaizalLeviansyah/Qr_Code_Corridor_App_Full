@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/videos', getVideos);
 router.get('/videos/:id', getVideosById);
-router.post('/videos/:id', saveVideos);
+router.post('/videos', saveVideos);
 router.patch('/videos/:id', updateVideos);
 router.delete('videos/:id', deleteVideos);
 

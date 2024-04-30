@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import Videos from "../models/videosModel.js";
 
@@ -36,7 +37,7 @@ export const saveVideos = (req, res)=>{
     if (!allowedType.includes(ext.toLowerCase())) return res.status(422).json({msg: "Invalid Video"});
     if (fileSize > 100000000) return res.status(422).json({msg: "Video must be less than 100 MB"});
 
-    file.mv(`./public/videos/${fileName}`, async(err)=>{
+    file.mv(`./public/videos/new/${fileName}`, async(err)=>{
         if(err) return res.status(500).json({msg: err.message});
         try {
             await Videos.create({name: name, videos: fileName, url: url});
@@ -71,7 +72,7 @@ export const updateVideos = async(req, res)=>{
         const filepath = `./public/videos/${Videos.videos}`;
         fs.unlinkSync(filepath);
 
-        file.mv(`./public/Videos/${fileName}`, (err)=>{
+        file.mv(`./public/videos/new/${fileName}`, (err)=>{
             if(err) return res.status(500).json({msg: err.message});
         });
     }
@@ -99,7 +100,7 @@ export const deleteVideos = async(req, res)=>{
     if(!Videos) return res.status(404).json({msg: "No Data Found"});
 
     try {
-        const filepath = `./public/Videos/${Videos.videos}`;
+        const filepath = `./public/videos/${Videos.video}`;
         fs.unlinkSync(filepath);
         await Videos.destroy({
             where:{

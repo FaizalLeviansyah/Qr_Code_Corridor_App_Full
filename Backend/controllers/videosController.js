@@ -80,7 +80,7 @@ export const updateVideos = async(req, res)=>{
     const url = `${req.protocol}://${req.get("host")}/videos/${fileName}`; 
     
     try {
-        await Videos.update({name: name, image: fileName, url: url},{
+        await Videos.update({name: name, videos: fileName, url: url},{
             where:{
                 id: req.params.id
             }
@@ -92,15 +92,15 @@ export const updateVideos = async(req, res)=>{
 }
 
 export const deleteVideos = async(req, res)=>{
-    const Videos = await Videos.findOne({
+    const videos = await Videos.findOne({
         where:{
             id : req.params.id
         }
     });
-    if(!Videos) return res.status(404).json({msg: "No Data Found"});
+    if(!videos) return res.status(404).json({msg: "No Data Found"});
 
     try {
-        const filepath = `./public/videos/${Videos.video}`;
+        const filepath = `./public/videos/new/${videos.videos}`;
         fs.unlinkSync(filepath);
         await Videos.destroy({
             where:{

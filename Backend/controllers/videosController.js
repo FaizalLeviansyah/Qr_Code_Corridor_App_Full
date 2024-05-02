@@ -49,16 +49,16 @@ export const saveVideos = (req, res)=>{
 }
 
 export const updateVideos = async(req, res)=>{
-    const Videos = await Videos.findOne({
+    const videos = await Videos.findOne({
         where:{
             id : req.params.id
         }
     });
-    if (!Videos) return res.status(404).json({msg: "Data Not Found"});
+    if (!videos) return res.status(404).json({msg: "Data Not Found"});
 
     let fileName = "";
     if (req.files === null) {
-        fileName = Videos.videos;
+        fileName = videos.videos;
     } else {
         const file = req.files.file;
         const fileSize = file.data.length;
@@ -69,7 +69,7 @@ export const updateVideos = async(req, res)=>{
         if(!allowedType.includes(ext.toLowerCase())) return res.status(422).json({msg: "Invalid Video"});
         if(fileSize > 10000000) return res.status(422).json({msg: "Video must be less than 100 MB"});
 
-        const filepath = `./public/videos/${Videos.videos}`;
+        const filepath = `./public/videos/new/${videos.videos}`;
         fs.unlinkSync(filepath);
 
         file.mv(`./public/videos/new/${fileName}`, (err)=>{
@@ -80,7 +80,7 @@ export const updateVideos = async(req, res)=>{
     const url = `${req.protocol}://${req.get("host")}/videos/${fileName}`; 
     
     try {
-        await Videos.update({name: name, videos: fileName, url: url},{
+        await videos.update({name: name, videos: fileName, url: url},{
             where:{
                 id: req.params.id
             }
